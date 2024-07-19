@@ -7,7 +7,7 @@ from fastapi import FastAPI, HTTPException
 from pssh.clients import ParallelSSHClient, SSHClient
 from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.responses import PlainTextResponse
-from multiprocessing import Process
+from multiprocessing import Process, Value
 import asyncio
 from fastapi import FastAPI, WebSocket, Request, HTTPException
 from fastapi.templating import Jinja2Templates
@@ -109,15 +109,15 @@ def run_aceso_profile_proccess():
     debug(client11, output)
 
 def run_aceso_profile_common():
-    Process(target=run_aceso_profile_proccess)
+    Process(target=run_aceso_profile_proccess).start()
     return {"aceso_profile": True}
 
-@app.get("/run/aceso/profile/{modelsize}")
-def run_aceso_profile_get(modelsize: str):
+@app.get("/run/aceso/profile")
+def run_aceso_profile_get(modelsize: str | None = "all"):
     return run_aceso_profile_common()
 
 @app.post("/run/aceso/profile/")
-def run_aceso_profile_post(modelsize: str):
+def run_aceso_profile_post(modelsize: str | None = "all"):
     return run_aceso_profile_common()
 
 # ------ Search ------
@@ -135,15 +135,15 @@ def run_aceso_search_process():
     debug_multiple(clientAll, outputs)
 
 def run_aceso_search_common():
-    Process(target=run_aceso_search_process)
+    Process(target=run_aceso_search_process).start()
     return {"aceso_search": True}
 
-@app.get("/run/aceso/search/{modelsize}")
-def run_aceso_search_get(modelsize: str):
+@app.get("/run/aceso/search")
+def run_aceso_search_get(modelsize: str | None = "all"):
     return run_aceso_profile_common()
 
 @app.post("/run/aceso/search/")
-def run_aceso_search_post(modelsize: str):
+def run_aceso_search_post(modelsize: str | None = "all"):
     return run_aceso_profile_common()
 
 # ------ Train ------
@@ -153,15 +153,16 @@ def run_aceso_train_process():
     debug_multiple(clientAll, outputs)
 
 def run_aceso_train_common():
-    Process(target=run_aceso_train_process)
+    Process(target=run_aceso_train_process).start()
+    # run_aceso_train_process()
     return {"aceso_train": True}
 
-@app.get("/run/aceso/train/{modelsize}")
-def run_aceso_train_get(modelsize: str):
+@app.get("/run/aceso/train")
+def run_aceso_train_get(modelsize: str | None = "all"):
     return run_aceso_train_common()
 
 @app.post("/run/aceso/train/")
-def run_aceso_train_post(modelsize: str):
+def run_aceso_train_post(modelsize: str | None = "all"):
     return run_aceso_train_common()
 
 # ================== Megatron ====================
@@ -174,15 +175,15 @@ def run_megatron_search_process():
     debug_multiple(clientAll, outputs)
 
 def run_megatron_search_common():
-    Process(target=run_megatron_search_process)
+    Process(target=run_megatron_search_process).start()
     return {"megatron_search": True}
 
-@app.get("/run/megatron/search/{modelsize}")
-def run_megatron_search_get(modelsize: str):
+@app.get("/run/megatron/search")
+def run_megatron_search_get(modelsize: str | None = "all"):
     return run_megatron_search_common()
 
 @app.post("/run/megatron/search/")
-def run_megatron_search_post(modelsize: str):
+def run_megatron_search_post(modelsize: str | None = "all"):
     return run_megatron_search_common()
 
 # ------ Train ------
@@ -193,15 +194,15 @@ def run_megatron_train_process():
     debug_multiple(clientAll, outputs)
 
 def run_megatron_train_common():
-    Process(target=run_megatron_train_process)
+    Process(target=run_megatron_train_process).start()
     return {"megatron_train": True}
     
-@app.get("/run/megatron/train/{modelsize}")
-def run_megatron_train_get(modelsize: str):
+@app.get("/run/megatron/train")
+def run_megatron_train_get(modelsize: str | None = "all"):
     return run_megatron_train_common()
 
 @app.post("/run/megatron/train/")
-def run_megatron_train_post(modelsize: str):
+def run_megatron_train_post(modelsize: str | None = "all"):
     return run_megatron_train_common()
 
 
@@ -215,15 +216,15 @@ def run_alpa_profile_process():
     debug_multiple(clientAll, outputs)
 
 def run_alpa_profile_common():
-    Process(target=run_alpa_profile_process)
+    Process(target=run_alpa_profile_process).start()
     return {"alpa_profile": True}
 
-@app.get("/run/alpa/profile/{modelsize}")
-def run_alpa_profile_get(modelsize: str):
+@app.get("/run/alpa/profile")
+def run_alpa_profile_get(modelsize: str | None = "all"):
     return run_alpa_profile_common()
 
 @app.post("/run/alpa/profile/")
-def run_alpa_profile_post(modelsize: str):
+def run_alpa_profile_post(modelsize: str | None = "all"):
     return run_alpa_profile_common()
 
 # ------ Search ------
@@ -233,15 +234,15 @@ def run_alpa_search_process():
     debug_multiple(clientAll, outputs)
 
 def run_alpa_search_common():
-    Process(target=run_alpa_search_process)
+    Process(target=run_alpa_search_process).start()
     return {"alpa_search": True}
 
-@app.get("/run/alpa/search/{modelsize}")
-def run_alpa_search_get(modelsize: str):
+@app.get("/run/alpa/search")
+def run_alpa_search_get(modelsize: str | None = "all"):
     return run_alpa_search_common()
 
 @app.post("/run/alpa/search/")
-def run_alpa_search_post(modelsize: str):
+def run_alpa_search_post(modelsize: str | None = "all"):
     return run_alpa_search_common()
 
 # ------ Train ------
@@ -251,20 +252,26 @@ def run_alpa_train_process():
     debug_multiple(clientAll, outputs)
 
 def run_alpa_train_common():
-    Process(target=run_alpa_train_process)
+    Process(target=run_alpa_train_process).start()
     return {"alpa_train": True}
 
-@app.get("/run/alpa/train/{modelsize}")
-def run_alpa_train_get(modelsize: str):
+@app.get("/run/alpa/train")
+def run_alpa_train_get(modelsize: str | None = "all"):
     return run_alpa_train_common()
 
 @app.post("/run/alpa/train/")
-def run_alpa_train_post(modelsize: str):
+def run_alpa_train_post(modelsize: str | None = "all"):
     return run_alpa_train_common()
 
 # ======================= cancel =========================
 def cancel_common():
-    outputs = clientAll.run_command('pkill python')
+    outputs = clientAll.run_command('pkill -9 aceso*')
+    debug_multiple(clientAll, outputs)
+    outputs = clientAll.run_command('pkill -9 alpa*')
+    debug_multiple(clientAll, outputs)
+    outputs = clientAll.run_command('pkill -9 megatron*')
+    debug_multiple(clientAll, outputs)
+    outputs = clientAll.run_command('pkill -9 python')
     debug_multiple(clientAll, outputs)
     return {"cancel": True}
 
