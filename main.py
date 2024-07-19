@@ -66,12 +66,20 @@ def debug(client, output):
         client.wait_finished(output)
         print_output(output)
 
+def wait(client, output):
+    client.wait_finished(output)
+    print_output(output)
 
 def debug_multiple(clients, outputs):
     if DEBUG:
         clients.join()
         for output in outputs:
             print_output(output)
+
+def wait_multiple(clients, outputs):
+    clients.join()
+    for output in outputs:
+        print_output(output)
 
 #def check_output_arr():
 #    for output in output_arr:
@@ -266,13 +274,13 @@ def run_alpa_train_post(modelsize: str | None = "all"):
 # ======================= cancel =========================
 def cancel_common():
     outputs = clientAll.run_command('pkill -9 aceso*')
-    debug_multiple(clientAll, outputs)
+    wait_multiple(clientAll, outputs)
     outputs = clientAll.run_command('pkill -9 alpa*')
-    debug_multiple(clientAll, outputs)
+    wait_multiple(clientAll, outputs)
     outputs = clientAll.run_command('pkill -9 megatron*')
-    debug_multiple(clientAll, outputs)
+    wait_multiple(clientAll, outputs)
     outputs = clientAll.run_command('pkill -9 python')
-    debug_multiple(clientAll, outputs)
+    wait_multiple(clientAll, outputs)
     return {"cancel": True}
 
 @app.get("/cancel")
