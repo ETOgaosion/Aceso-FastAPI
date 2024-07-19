@@ -1,0 +1,4 @@
+__pycache__
+FastAPI
+*.swp
+*.pyc

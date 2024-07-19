@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html lang="en" class="dark">
+	<head>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<title>Logging Test</title>
+	</head>
+
+	<body class="dark:bg-gray-900">
+		<div class="flex items-center py-2 px-3">
+			<h1 class="text-3xl text-slate-300 dark:text-white">Logging Test</h1>
+		</div>
+		<br />
+
+		<div class="flex items-center py-2 px-3">
+			<h2 class="text-2xl text-slate-400 overline decoration-4 decoration-pink-500 dark:text-white">Logging</h2>
+		</div>
+		<label for="systemname" class="dark:text-white">系统名称:</label>
+		<div id="systemname" class="dark:text-white">{{context.systemname}}</div>
+		<br /><br />
+
+		<label for="stagename" class="dark:text-white">阶段名称:</label>
+		<div id="stagename" class="dark:text-white">{{context.stagename}}</div>
+		<br /><br />
+
+		<label for="interval" class="dark:text-white">打印时间间隔:</label>
+		<div id="interval" class="dark:text-white">{{context.interval}}</div>
+		<br /><br />
+
+		<div class="flex items-center py-2 px-3">
+			<div
+				id="logs"
+				class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+			>
+				reading logs...<br>
+			</div>
+		</div>
+
+		<script>
+			var ws_log = new WebSocket("ws://127.0.0.1:10060/logws/" + document.getElementById("systemname").textContent + "/" + document.getElementById("stagename").textContent + "/" + document.getElementById("interval").textContent);
+	  
+			ws_log.onmessage = function (event) {
+			  var logs = document.getElementById("logs");
+			  var log_data = event.data;
+			  if (logs.innerHTML.slice(-4, -1) != "<br>") {
+				logs.innerHTML += "<br>"
+			  }
+			  logs.innerHTML += log_data;
+			};
+		</script>
+	</body>
+</html>
