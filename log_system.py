@@ -148,7 +148,7 @@ async def websocket_test(websocket: WebSocket):
 
 @app.get("/log/{systemname}/{stagename}/{interval}")
 def read_log(request: Request, systemname: str, stagename: str, interval: int = 1):
-    return templates.TemplateResponse("logging.html", {"request": request, "context": {"systemname": systemname, "stagename": stagename, "interval": interval}})
+    return templates.TemplateResponse("logging_10060.html", {"request": request, "context": {"systemname": systemname, "stagename": stagename, "interval": interval}})
 
 
 # 运行应用

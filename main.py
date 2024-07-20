@@ -342,12 +342,12 @@ async def read_log_file(path: str, last_lines: int = 0):
 
 
 async def read_log_file_directly(path: str, last_lines: int = 0):
-    print("hit")
     with open(path, 'r') as file:
         lines = file.readlines()
-        tmp_end  = last_lines + random.randint(1, 4) * 4
+        tmp_end = last_lines + random.randint(1, 4) * 4
         end = tmp_end if tmp_end < len(lines) else len(lines)
-        new_lines = change_enter_key(lines[last_lines: end])
+        lines = lines[last_lines: end]
+        new_lines = change_enter_key(lines)
         return new_lines, len(lines)
 
 
@@ -390,7 +390,6 @@ async def websocket_endpoint_log(websocket: WebSocket,
 
 @app.websocket("/logtest")
 async def websocket_test(websocket: WebSocket):
-    print('hit')
     await websocket.accept()
     # 跟踪日志行数
     lines = 0
@@ -422,4 +421,4 @@ def run_result():
 if __name__ == "__main__":
     import uvicorn
     # 按实际修改主机和端口
-    uvicorn.run(app, host="0.0.0.0", port=10060)
+    uvicorn.run(app, host="0.0.0.0", port=8000)

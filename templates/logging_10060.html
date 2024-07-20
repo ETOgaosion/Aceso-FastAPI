@@ -37,7 +37,7 @@
 		</div>
 
 		<script>
-			var ws_log = new WebSocket("ws://127.0.0.1:8000/logws/" + document.getElementById("systemname").textContent + "/" + document.getElementById("stagename").textContent + "/" + document.getElementById("interval").textContent);
+			var ws_log = new WebSocket("ws://127.0.0.1:10060/logws/" + document.getElementById("systemname").textContent + "/" + document.getElementById("stagename").textContent + "/" + document.getElementById("interval").textContent);
 	  
 			ws_log.onmessage = function (event) {
 			  var logs = document.getElementById("logs");
